@@ -197,9 +197,9 @@ class Dashboard extends Component {
 
     const dashboard = store.getStore('dashboard')
     const account = store.getStore('account')
-    const growth = localStorage.getItem('yearn.finance-dashboard-growth')
-    const currency = localStorage.getItem('yearn.finance-dashboard-currency')
-    const basedOn = localStorage.getItem('yearn.finance-dashboard-basedon')
+    const growth = localStorage.getItem('bitfinance-dashboard-growth')
+    const currency = localStorage.getItem('bitfinance-dashboard-currency')
+    const basedOn = localStorage.getItem('bitfinance-dashboard-basedon')
 
     this.state = {
       dashboard: dashboard,
@@ -408,7 +408,7 @@ class Dashboard extends Component {
     val[event.target.name] = event.target.value
     this.setState(val)
 
-    localStorage.setItem('yearn.finance-dashboard-basedon', event.target.value)
+    localStorage.setItem('bitfinance-dashboard-basedon', event.target.value)
 
     this.setState({ loading: true })
     dispatcher.dispatch({ type: GET_DASHBOARD_SNAPSHOT, content: {} })
@@ -431,14 +431,14 @@ class Dashboard extends Component {
         newGrowth = 0
     }
     this.setState({ growth: newGrowth })
-    localStorage.setItem('yearn.finance-dashboard-growth', newGrowth.toString())
+    localStorage.setItem('bitfinance-dashboard-growth', newGrowth.toString())
   }
 
   balanceClicked = () => {
     const { currency } = this.state
     this.setState({ currency: (currency === 'USD' ? 'ETH' : 'USD') })
 
-    localStorage.setItem('yearn.finance-dashboard-currency', (currency === 'USD' ? 'ETH' : 'USD'))
+    localStorage.setItem('bitfinance-dashboard-currency', (currency === 'USD' ? 'ETH' : 'USD'))
   }
 
   renderVaults = () => {

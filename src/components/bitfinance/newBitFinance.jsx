@@ -7,7 +7,7 @@ import {
   Button,
   Grid
 } from '@material-ui/core';
-import { colors } from '../../theme'
+import { colors } from '../../theme/theme'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import * as moment from 'moment';
 
@@ -15,18 +15,18 @@ import {
   ERROR,
   CONNECTION_CONNECTED,
   CONNECTION_DISCONNECTED,
-  CONFIGURE_COVER,
-  CONFIGURE_COVER_RETURNED,
-  GET_COVER_BALANCES,
-  COVER_BALANCES_RETURNED,
-  COVER_PURCHASE,
-  COVER_PURCHASE_RETURNED
-} from '../../constants'
+  CONFIGURE_bitfinance,
+  CONFIGURE_bitfinance_RETURNED,
+  GET_bitfinance_BALANCES,
+  bitfinance_BALANCES_RETURNED,
+  BITFINANCE_PURCHASE,
+  BITFINANCE_PURCHASE_RETURNED
+} from '../../constants/constants'
 
-import Loader from '../loader'
-import Snackbar from '../snackbar'
+import Loader from '../loader/loader'
+import Snackbar from '../snackbar/snackbar'
 
-import Store from "../../stores";
+import Store from "../../stores/store";
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
@@ -38,7 +38,7 @@ const styles = theme => ({
     marginTop: '60px',
     maxWidth: '1000px',
   },
-  coverList: {
+  bitfinanceList: {
     width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
@@ -116,7 +116,7 @@ const styles = theme => ({
     margin: '24px 0px'
   },
   protocolLogo: {
-    backgroundSize: 'cover',
+    backgroundSize: 'bitfinance',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     width: '100%',
@@ -199,7 +199,7 @@ const styles = theme => ({
   }
 });
 
-class NewCover extends Component {
+class Newbitfinance extends Component {
 
   constructor() {
     super()
@@ -208,9 +208,9 @@ class NewCover extends Component {
 
     this.state = {
       account: account,
-      coverProtocols: store.getStore('coverProtocols'),
-      coverCollateral: store.getStore('coverCollateral'),
-      coverAssets: store.getStore('coverAssets'),
+      bitfinanceProtocols: store.getStore('bitfinanceProtocols'),
+      bitfinanceCollateral: store.getStore('bitfinanceCollateral'),
+      bitfinanceAssets: store.getStore('bitfinanceAssets'),
       loading: true,
       protocol: 'YEARN',
       assetAmount: '100',
@@ -220,25 +220,25 @@ class NewCover extends Component {
       snackbarMessage: null,
     }
 
-    dispatcher.dispatch({ type: CONFIGURE_COVER })
+    dispatcher.dispatch({ type: CONFIGURE_BITFINANCE })
   }
 
   componentWillMount() {
     emitter.on(ERROR, this.errorReturned);
     emitter.on(CONNECTION_CONNECTED, this.connectionConnected);
     emitter.on(CONNECTION_DISCONNECTED, this.connectionDisconnected);
-    emitter.on(CONFIGURE_COVER_RETURNED, this.configureCoverReturned);
-    emitter.on(COVER_BALANCES_RETURNED, this.coverBalancesReturned);
-    emitter.on(COVER_PURCHASE_RETURNED, this.showHash);
+    emitter.on(CONFIGURE_bitfinance_RETURNED, this.configurebitfinanceReturned);
+    emitter.on(BITFINANCE_BALANCES_RETURNED, this.bitfinanceBalancesReturned);
+    emitter.on(BITFINANCE_PURCHASE_RETURNED, this.showHash);
   }
 
   componentWillUnmount() {
     emitter.removeListener(ERROR, this.errorReturned);
     emitter.removeListener(CONNECTION_CONNECTED, this.connectionConnected);
     emitter.removeListener(CONNECTION_DISCONNECTED, this.connectionDisconnected);
-    emitter.removeListener(CONFIGURE_COVER_RETURNED, this.configureCoverReturned);
-    emitter.removeListener(COVER_BALANCES_RETURNED, this.coverBalancesReturned);
-    emitter.removeListener(COVER_PURCHASE_RETURNED, this.showHash);
+    emitter.removeListener(CONFIGURE_bitfinance_RETURNED, this.configurebitfinanceReturned);
+    emitter.removeListener(BITFINANCE_BALANCES_RETURNED, this.bitfinanceBalancesReturned);
+    emitter.removeListener(BITFINANCE_PURCHASE_RETURNED, this.showHash);
   };
 
   connectionConnected = () => {
@@ -247,31 +247,31 @@ class NewCover extends Component {
       loading: true
     })
 
-    dispatcher.dispatch({ type: GET_COVER_BALANCES })
+    dispatcher.dispatch({ type: GET_BITFINANCE_BALANCES })
   };
 
   connectionDisconnected = () => {
     this.setState({ account: store.getStore('account') })
   }
 
-  configureCoverReturned = () => {
+  configureBitFinanceReturned = () => {
 
     const { account } = this.state
 
     this.setState({
-      coverProtocols: store.getStore('coverProtocols'),
+      bitfinanceProtocols: store.getStore('bitfinanceProtocols'),
       loading: false
     })
 
     if(account && account.address) {
-      dispatcher.dispatch({ type: GET_COVER_BALANCES })
+      dispatcher.dispatch({ type: GET_BITFINANCE_BALANCES })
     }
   }
 
-  coverBalancesReturned = () => {
+  bitfinanceBalancesReturned = () => {
     this.setState({
-      coverCollateral: store.getStore('coverCollateral'),
-      coverAssets: store.getStore('coverAssets'),
+      bitfinanceCollateral: store.getStore('bitfinanceCollateral'),
+      bitfinanceAssets: store.getStore('bitfinanceAssets'),
       loading: false
     })
   }
@@ -354,7 +354,7 @@ class NewCover extends Component {
               </Grid>
             </Grid>
             <Typography variant="body1">
-              * To find out more about how claims are assessed and paid out, go to <a href="https://docs.coverprotocol.com/product/claims-guidelines" rel="noopener noreferrer" target="_blank">Cover Protocol's claim guidelines</a>
+              * To find out more about how claims are assessed and paid out, go to <a href="https://docs.bitfinance.solutions/product/claims-guidelines" rel="noopener noreferrer" target="_blank">BitFinance Protocol's claim guidelines</a>
             </Typography>
           </div>
         </div>
@@ -373,7 +373,7 @@ class NewCover extends Component {
   };
 
   renderProtocolSelect = () => {
-    const { loading, coverProtocols, protocol } = this.state
+    const { loading, bitfinanceProtocols, protocol } = this.state
     const { classes } = this.props
 
     return (
@@ -409,7 +409,7 @@ class NewCover extends Component {
         disabled={ loading }
         placeholder={ 'Select' }
       >
-        { (coverProtocols && coverProtocols.length > 0) && coverProtocols.map((theProtocol) => { return this.renderProtocolOption(theProtocol) }) }
+        { (bitfinanceProtocols && bitfinanceProtocols.length > 0) && bitfinanceProtocols.map((theProtocol) => { return this.renderProtocolOption(theProtocol) }) }
       </TextField>
     )
   }
@@ -444,7 +444,7 @@ class NewCover extends Component {
 
   getLogoForProtocol = (protocol, isIcon) => {
     try {
-      return require(`../../assets/cover/${protocol.name.toLowerCase()}_${isIcon ? "icon" : "logo"}.png`)
+      return require(`../../assets/bitfinance/${protocol.name.toLowerCase()}_${isIcon ? "icon" : "logo"}.png`)
     } catch {
       return require('../../assets/unknown-logo.png')
     }
@@ -460,14 +460,14 @@ class NewCover extends Component {
       assetAmount,
       assetAmountError,
       protocol,
-      coverCollateral,
-      coverProtocols
+      bitfinanceCollateral,
+      bitfinanceProtocols
     } = this.state
 
     let selectedAsset = {}
-    if(protocol && coverCollateral.length > 0) {
+    if(protocol && bitfinanceCollateral.length > 0) {
 
-      let selectedProtocol = coverProtocols.filter((prot) => {
+      let selectedProtocol = bitfinanceProtocols.filter((prot) => {
         return prot.name === protocol
       })
 
@@ -477,7 +477,7 @@ class NewCover extends Component {
         selectedProtocol = selectedProtocol[0]
       }
 
-      selectedAsset = coverCollateral.filter((col) => {
+      selectedAsset = bitfinanceCollateral.filter((col) => {
         return col.address === selectedProtocol.purchaseCurrency
       })
 
@@ -556,15 +556,15 @@ class NewCover extends Component {
     const {
       assetAmount,
       protocol,
-      coverProtocols,
+      bitfinanceProtocols,
       claimOption
     } = this.state
 
-    if(!coverProtocols) {
+    if(!bitfinanceProtocols) {
       return null
     }
 
-    let selectedProtocol = coverProtocols.filter((prot) => {
+    let selectedProtocol = bitfinanceProtocols.filter((prot) => {
       return prot.name === protocol
     })
 
@@ -577,7 +577,7 @@ class NewCover extends Component {
     const tokensNeeded = this.calculateAmountNeeded(
       parseFloat(assetAmount), 
       selectedProtocol.claimPoolData.swapFee, 
-      selectedProtocol.claimPoolData.covTokenWeight, 
+      selectedProtocol.claimPoolData.bitTokenWeight, 
       selectedProtocol.claimPoolData.daiInPool, 
       selectedProtocol.claimPoolData.price
       );
@@ -619,15 +619,15 @@ class NewCover extends Component {
     const {
       assetAmount,
       protocol,
-      coverProtocols,
+      bitfinanceProtocols,
       claimOption
     } = this.state
 
-    if(!coverProtocols) {
+    if(!bitfinanceProtocols) {
       return null
     }
 
-    let selectedProtocol = coverProtocols.filter((prot) => {
+    let selectedProtocol = bitfinanceProtocols.filter((prot) => {
       return prot.name === protocol
     })
 
@@ -693,14 +693,14 @@ class NewCover extends Component {
 
   onPurchase = () => {
     const {
-      coverProtocols,
-      coverCollateral,
+      bitfinanceProtocols,
+      bitfinanceCollateral,
       protocol,
       assetAmount,
       claimOption
     } = this.state
 
-    let selectedProtocol = coverProtocols.filter((prot) => {
+    let selectedProtocol = bitfinanceProtocols.filter((prot) => {
       return prot.name === protocol
     })
 
@@ -738,7 +738,7 @@ class NewCover extends Component {
         ).toString()
     }
 
-    let selectedPurchaseAsset = coverCollateral.filter((col) => {
+    let selectedPurchaseAsset = bitfinanceCollateral.filter((col) => {
       return col.address === selectedProtocol.purchaseCurrency
     })
 
@@ -748,7 +748,7 @@ class NewCover extends Component {
       selectedPurchaseAsset = {}
     }
     this.setState({ loading: true })
-    dispatcher.dispatch({ type: COVER_PURCHASE, content: { amount: purchaseAmount, amountOut: parseFloat(assetAmount).toString(), asset: asset, collateral: selectedPurchaseAsset, pool: pool } })
+    dispatcher.dispatch({ type: BITFINANCE_PURCHASE, content: { amount: purchaseAmount, amountOut: parseFloat(assetAmount).toString(), asset: asset, collateral: selectedPurchaseAsset, pool: pool } })
   }
 
   balanceClicked = (asset) => {
@@ -763,4 +763,4 @@ class NewCover extends Component {
   }
 }
 
-export default withStyles(styles)(NewCover);
+export default withStyles(styles)(Newbitfinance);

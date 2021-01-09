@@ -74,12 +74,12 @@ import {
   LENDING_DISABLE_COLLATERAL,
   LENDING_DISABLE_COLLATERAL_RETURNED,
   MAX_UINT256,
-  CONFIGURE_COVER,
-  CONFIGURE_COVER_RETURNED,
-  GET_COVER_BALANCES,
-  COVER_BALANCES_RETURNED,
-  COVER_PURCHASE,
-  COVER_PURCHASE_RETURNED,
+  CONFIGURE_BITFINANCE,
+  CONFIGURE_BITFINANCE_RETURNED,
+  GET_BITFINANCE_BALANCES,
+  BITFINANCE_BALANCES_RETURNED,
+  BITFINANCE_PURCHASE,
+  BITFINANCE_PURCHASE_RETURNED,
 } from '../constants';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js'
@@ -122,9 +122,9 @@ class Store {
       vaultAssets: defaultValues.vaultAssets,
       experimentalVaultAssets: defaultValues.experimentalVaultAssets,
       lendingAssets: defaultValues.lendingAssets,
-      coverProtocols: defaultValues.coverProtocols,
-      coverCollateral: [],
-      coverAssets: [],
+      bitfinanceProtocols: defaultValues.bitfinanceProtocols,
+      bitfinanceCollateral: [],
+      bitfinanceAssets: [],
       lendingSupply: 0,
       lendingBorrow: 0,
       lendingCollateral: 0,
@@ -433,14 +433,14 @@ class Store {
           case LENDING_DISABLE_COLLATERAL:
             this.lendingDisableCollateral(payload)
             break;
-          case CONFIGURE_COVER:
-            this.configureCover(payload)
+          case CONFIGURE_BITFINANCE:
+            this.configurebitfinance(payload)
             break;
-          case GET_COVER_BALANCES:
-            this.getCoverBalances(payload)
+          case GET_BITFINANCE_BALANCES:
+            this.getbitfinanceBalances(payload)
             break;
-          case COVER_PURCHASE:
-            this.purchaseCover(payload)
+          case BITFINANCE_PURCHASE:
+            this.purchasebitfinance(payload)
             break;
           default: {
           }
@@ -468,13 +468,13 @@ class Store {
       vaultAssets: defaultvalues.vaultAssets,
       experimentalVaultAssets: defaultvalues.experimentalVaultAssets,
       lendingAssets: defaultvalues.lendingAssets,
-      coverProtocols: defaultvalues.coverProtocols
+      bitfinanceProtocols: defaultvalues.bitfinanceProtocols
     })
   }
 
   _getDefaultValues = () => {
     return {
-      coverProtocols: [
+      bitfinanceProtocols: [
 
       ],
       lendingAssets: [{
@@ -1117,11 +1117,11 @@ class Store {
         },
 
         {
-          id: 'YFI',
-          name: 'yearn.finance',
-          symbol: 'YFI',
-          description: 'yearn.finance',
-          vaultSymbol: 'yYFI',
+          id: 'BFN',
+          name: 'BitFinance',
+          symbol: 'BFN',
+          description: 'BitFinance',
+          vaultSymbol: 'BFV',
           erc20address: '0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',
           vaultContractAddress: '0xBA2E7Fed597fd0E3e70f5130BcDbbFE06bB94fe1',
           vaultContractABI: config.vaultContractV3ABI,
@@ -1134,7 +1134,7 @@ class Store {
           withdrawAll: true,
           lastMeasurement: 10695309,
           measurement: 1e18,
-          price_id: 'yearn-finance',
+          price_id: 'bitfinance',
         },
         {
           id: 'DAI',
@@ -4893,10 +4893,10 @@ class Store {
     }
   }
 
-  configureCover = async (payload) => {
+  configurebitfinance = async (payload) => {
 
     try {
-      const url = config.coverAPI
+      const url = config.bitfinanceAPI
       const protocolsString = await rp(url);
       const protocolsJSON = JSON.parse(protocolsString)
 
@@ -4906,11 +4906,11 @@ class Store {
       const claimAssets = protocolsJSON.protocols.filter((protocol) => protocol.protocolActive).map((protocol) => {
         const name = protocol.protocolName
         const latestExpiry = protocol.expirationTimestamps[protocol.expirationTimestamps.length - 1]
-        const claimAddress = protocol.coverObjects[protocol.coverObjects.length - 1].tokens.claimAddress
-        const noClaimAddress = protocol.coverObjects[protocol.coverObjects.length - 1].tokens.noClaimAddress
-        const collateralAddress = protocol.coverObjects[protocol.coverObjects.length - 1].collateralAddress
+        const claimAddress = protocol.bitfinanceObjects[protocol.bitfinanceObjects.length - 1].tokens.claimAddress
+        const noClaimAddress = protocol.bitfinanceObjects[protocol.bitfinanceObjects.length - 1].tokens.noClaimAddress
+        const collateralAddress = protocol.bitfinanceObjects[protocol.bitfinanceObjects.length - 1].collateralAddress
         let collateralName;
-        // currently supported collateral types are DAI and yDAI, however, purchasing coverage always uses DAI through Balancer
+        // currently supported collateral types are DAI and yDAI, however, purchasing bitfinanceage always uses DAI through Balancer
         const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
         if(collateralAddress === '0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01') {
           collateralName = "yDAI";
@@ -5047,19 +5047,19 @@ class Store {
           return a.name > b.name ? 1 : -1;
         }
       })
-      store.setStore({ coverProtocols: claimAssets })
+      store.setStore({ bitfinanceProtocols: claimAssets })
 
-      emitter.emit(CONFIGURE_COVER_RETURNED, claimAssets)
+      emitter.emit(CONFIGURE_bitfinance_RETURNED, claimAssets)
     } catch(e) {
       console.log(e)
       emitter.emit(ERROR, e)
     }
   }
 
-  getCoverBalances = async (payload) => {
+  getbitfinanceBalances = async (payload) => {
     const account = store.getStore('account')
 
-    const coverProtocols = store.getStore('coverProtocols')
+    const bitfinanceProtocols = store.getStore('bitfinanceProtocols')
 
     if(!account || !account.address) {
       return false
@@ -5070,19 +5070,19 @@ class Store {
       return null
     }
 
-    if(!coverProtocols) {
+    if(!bitfinanceProtocols) {
       return null
     }
 
     // get unique collaterals
-    const collateralAssets = coverProtocols.map((protocol) => {
+    const collateralAssets = bitfinanceProtocols.map((protocol) => {
       return protocol.collateralAddress
     }).reduce((unique, item) => {
       return unique.includes(item) ? unique : [...unique, item]
     }, [])
 
     // get unique tokens (claim vs noclaim)
-    const claimAssets = coverProtocols.map((protocol) => {
+    const claimAssets = bitfinanceProtocols.map((protocol) => {
       return [protocol.claimAddress, protocol.noClaimAddress]
     }).flat().reduce((unique, item) => {
       return unique.includes(item) ? unique : [...unique, item]
@@ -5092,7 +5092,7 @@ class Store {
     const collateral = await this._getClaimAssetInfo(web3, account, collateralAssets)
     const assets = await this._getClaimAssetInfo(web3, account, claimAssets)
 
-    let populatedCoverProtocols = coverProtocols.map((protocol) => {
+    let populatedbitfinanceProtocols = bitfinanceProtocols.map((protocol) => {
       let claimAsset = assets.filter((asset) => {
         return asset.address === protocol.claimAddress
       })
@@ -5108,12 +5108,12 @@ class Store {
     })
 
     store.setStore({
-      coverCollateral: collateral,
-      coverAssets: assets,
-      coverProtocols: populatedCoverProtocols
+      bitfinanceCollateral: collateral,
+      bitfinanceAssets: assets,
+      bitfinanceProtocols: populatedbitfinanceProtocols
     })
 
-    return emitter.emit(COVER_BALANCES_RETURNED)
+    return emitter.emit(bitfinance_BALANCES_RETURNED)
   }
 
   _getClaimAssetInfo = async (web3, account, assets) => {
@@ -5154,7 +5154,7 @@ class Store {
     }
   }
 
-  purchaseCover = (payload) => {
+  purchasebitfinance = (payload) => {
     const account = store.getStore('account')
     const { asset, collateral, amount, amountOut, pool } = payload.content
 
@@ -5174,7 +5174,7 @@ class Store {
           return emitter.emit(ERROR, err);
         }
 
-        return emitter.emit(COVER_PURCHASE_RETURNED, res)
+        return emitter.emit(bitfinance_PURCHASE_RETURNED, res)
       })
     })
   }

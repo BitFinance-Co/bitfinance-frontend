@@ -213,15 +213,15 @@ const styles = theme => ({
       display: 'none'
     }
   },
-  cover: {
+  bitfinance: {
     backgroundColor: colors.white,
     '&:hover': {
-      backgroundColor: colors.coverPurple,
+      backgroundColor: colors.bitfinancePurple,
       '& .title': {
         color: colors.white,
       },
       '& .icon': {
-        backgroundImage: `url(${require('../../assets/cover-icon-hover.png')})`
+        backgroundImage: `url(${require('../../assets/bitfinance-icon-hover.png')})`
       },
       '& .description': {
         display: 'block',
@@ -231,13 +231,13 @@ const styles = theme => ({
       }
     },
     '& .title': {
-      color: colors.coverPurple,
+      color: colors.bitfinancePurple,
     },
     '& .icon': {
-      color: colors.coverPurple,
+      color: colors.bitfinancePurple,
       height: '100px',
       width: '100px',
-      backgroundImage: `url(${require('../../assets/cover-icon.png')})`,
+      backgroundImage: `url(${require('../../assets/bitfinance-icon.png')})`,
       backgroundSize: '100px 100px'
     },
     '& .description': {
@@ -279,12 +279,12 @@ class Home extends Component {
         <Card className={ `${classes.card} ${classes.apr}` } onClick={ () => { this.nav('dashboard') } }>
           <BarChartIcon className={ `${classes.icon} icon` } />
           <Typography variant={'h3'} className={ `${classes.title} title` }>Dashboard</Typography>
-          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Get a quick glance at how your portfolio is growing while invested in yearn's products." }</Typography>
+          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Get a quick glance at how your portfolio is growing while invested in BitFinance's products." }</Typography>
         </Card>
         <Card className={ `${classes.card} ${classes.vault}` } onClick={ () => { this.nav('vaults') }}>
           <PieChartIcon className={ `${classes.icon} icon` } />
           <Typography variant={'h3'} className={ `${classes.title} title` }>{ t("Home.Vaults") }</Typography>
-          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Vaults follow unique strategies that are designed to maximize the yield of the deposited asset and minimize risk." }</Typography>
+          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Vaults follow unique strategies that are designed to maximize the BitFinance of the deposited asset and minimize risk." }</Typography>
         </Card>
         <Card className={ `${classes.card} ${classes.earn}` } onClick={ () => { this.nav('earn') } }>
           <AttachMoneyIcon className={ `${classes.icon} icon` } />
@@ -306,15 +306,15 @@ class Home extends Component {
           <Typography variant={'h3'} className={ `${classes.title} title` }>{ t("Home.Lending") }</Typography>
           <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Lending, provided by cream." }</Typography>
         </Card>
-        <Card className={ `${classes.card} ${classes.cover}` } onClick={ () => { this.nav('cover') } }>
-          <div alt='' className={ `${classes.icon} icon cover` } />
-          <Typography variant={'h3'} className={ `${classes.title} title` }>{ t("Home.Cover") }</Typography>
-          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Cover provided by Cover Protocol." }</Typography>
+        <Card className={ `${classes.card} ${classes.bitfinance}` } onClick={ () => { this.nav('bitfinance') } }>
+          <div alt='' className={ `${classes.icon} icon bitfinance` } />
+          <Typography variant={'h3'} className={ `${classes.title} title` }>{ t("Home.BitFinance") }</Typography>
+          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "BitFinance Solutions provided by BitFinance Protocol." }</Typography>
         </Card>
         <Card className={ `${classes.card} ${classes.apr}` } onClick={ () => { this.nav('stats') } }>
           <BarChartIcon className={ `${classes.icon} icon` } />
           <Typography variant={'h3'} className={ `${classes.title} title` }>Stats</Typography>
-          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Get a quick glance at how yearn's vaults are performing." }</Typography>
+          <Typography variant={'h4'} className={ `${classes.description} description` }>{ "Get a quick glance at how BitFinance's vaults are performing." }</Typography>
         </Card>
       </div>
     )

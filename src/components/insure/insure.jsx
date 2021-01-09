@@ -398,7 +398,7 @@ class Insure extends Component {
                 <div className={ classes.assetIcon }>
                   <img
                     alt=""
-                    src={ require('../../assets/oCurve-logo.svg') }
+                    src={ require('../../assets/oBitFinance-logo.svg') }
                     height={ width > 600 ? '30px' : '25px'}
                     style={asset.disabled?{filter:'grayscale(100%)'}:{}}
                   />

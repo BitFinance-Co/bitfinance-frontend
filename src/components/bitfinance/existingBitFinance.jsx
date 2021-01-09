@@ -13,23 +13,23 @@ import {
   Tooltip,
   Grid
 } from '@material-ui/core';
-import { colors } from '../../theme'
+import { colors } from '../../theme/theme'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 import {
   CONNECTION_CONNECTED,
   CONNECTION_DISCONNECTED,
-  CONFIGURE_COVER,
-  CONFIGURE_COVER_RETURNED,
-  GET_COVER_BALANCES,
-  COVER_BALANCES_RETURNED,
-} from '../../constants'
+  CONFIGURE_BITFINANCE,
+  CONFIGURE_BITFINANCE_RETURNED,
+  GET_BITFINANCE_BALANCES,
+  BITFINANCE_BALANCES_RETURNED,
+} from '../../constants/constants'
 
 import * as moment from 'moment';
-import Loader from '../loader'
-import Snackbar from '../snackbar'
+import Loader from '../loader/loader'
+import Snackbar from '../snackbar/snackbar'
 
-import Store from "../../stores";
+import Store from "../../stores/store";
 const emitter = Store.emitter
 const dispatcher = Store.dispatcher
 const store = Store.store
@@ -86,7 +86,7 @@ const styles = theme => ({
   }
 });
 
-class NewCover extends Component {
+class NewBitFinance extends Component {
 
   constructor() {
     super()
@@ -95,7 +95,7 @@ class NewCover extends Component {
 
     this.state = {
       account: account,
-      coverProtocols: store.getStore('coverProtocols'),
+      bitfinanceProtocols: store.getStore('bitfinanceProtocols'),
       loading: true,
       page: 0,
       rowsPerPage: 5,
@@ -103,21 +103,21 @@ class NewCover extends Component {
       snackbarMessage: null,
     }
 
-    dispatcher.dispatch({ type: CONFIGURE_COVER })
+    dispatcher.dispatch({ type: CONFIGURE_BITFINANCE })
   }
 
   componentWillMount() {
     emitter.on(CONNECTION_CONNECTED, this.connectionConnected);
     emitter.on(CONNECTION_DISCONNECTED, this.connectionDisconnected);
-    emitter.on(CONFIGURE_COVER_RETURNED, this.configureCoverReturned);
-    emitter.on(COVER_BALANCES_RETURNED, this.coverBalancesReturned);
+    emitter.on(CONFIGURE_BITFINANCE_RETURNED, this.configureBitFInanceReturned);
+    emitter.on(BITFINANCE_BALANCES_RETURNED, this.bitfinanceBalancesReturned);
   }
 
   componentWillUnmount() {
     emitter.removeListener(CONNECTION_CONNECTED, this.connectionConnected);
     emitter.removeListener(CONNECTION_DISCONNECTED, this.connectionDisconnected);
-    emitter.removeListener(CONFIGURE_COVER_RETURNED, this.configureCoverReturned);
-    emitter.removeListener(COVER_BALANCES_RETURNED, this.coverBalancesReturned);
+    emitter.removeListener(CONFIGURE_BITFINANCE_RETURNED, this.configureBitFinanceReturned);
+    emitter.removeListener(BITFINANCE_BALANCES_RETURNED, this.bitfinanceBalancesReturned);
   };
 
   connectionConnected = () => {
@@ -126,32 +126,32 @@ class NewCover extends Component {
       loading: true
     })
 
-    dispatcher.dispatch({ type: GET_COVER_BALANCES })
+    dispatcher.dispatch({ type: GET_BITFINANCE_BALANCES })
   };
 
   connectionDisconnected = () => {
     this.setState({ account: store.getStore('account') })
   }
 
-  configureCoverReturned = () => {
+  configureBitFinanceReturned = () => {
 
     const { account } = this.state
 
     this.setState({
-      coverProtocols: store.getStore('coverProtocols'),
+      bitfinanceProtocols: store.getStore('bitfinanceProtocols'),
       loading: false
     })
 
     if(account && account.address) {
-      dispatcher.dispatch({ type: GET_COVER_BALANCES })
+      dispatcher.dispatch({ type: GET_BITFINANCE_BALANCES })
     }
   }
 
-  coverBalancesReturned = () => {
+  bitfinanceBalancesReturned = () => {
     this.setState({
-      coverCollateral: store.getStore('coverCollateral'),
-      coverAssets: store.getStore('coverAssets'),
-      coverProtocols: store.getStore('coverProtocols'),
+      bitfinanceCollateral: store.getStore('bitfinanceCollateral'),
+      bitfinanceAssets: store.getStore('bitfinanceAssets'),
+      bitfinanceProtocols: store.getStore('bitfinanceProtocols'),
       loading: false
     })
   }
@@ -177,7 +177,7 @@ class NewCover extends Component {
     return (
       <div className={ classes.root }>
         <div className={ classes.tableContainer} >
-          { this.renderCoverTable() }
+          { this.renderBitFinanceTable() }
         </div>
         <div className={ classes.disclaimerContainer }>
           <div className={ classes.disclaimer } style={{ marginTop: '25px', maxWidth: '500px' }}>
@@ -190,7 +190,7 @@ class NewCover extends Component {
               </Grid>
             </Grid>
             <Typography variant="body1">
-              To find out more about how claims are assessed and paid out, go to <a href="https://docs.coverprotocol.com/product/claims-guidelines" rel="noopener noreferrer" target="_blank">Cover Protocol's claim guidelines</a>
+              To find out more about how claims are assessed and paid out, go to <a href="https://docs.bitfinance.solutions/product/claims-guidelines" rel="noopener noreferrer" target="_blank">BitFinance Protocol's claim guidelines</a>
             </Typography>
           </div>
         </div>
@@ -208,10 +208,10 @@ class NewCover extends Component {
     return <Snackbar type={ snackbarType } message={ snackbarMessage } open={true}/>
   };
 
-  renderCoverTable = () =>  {
+  renderBitFinanceTable = () =>  {
 
     const { classes } = this.props
-    const { coverProtocols, page, rowsPerPage } = this.state
+    const { bitfinanceProtocols, page, rowsPerPage } = this.state
 
     return (
       <React.Fragment>
@@ -226,14 +226,14 @@ class NewCover extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              { this.renderCover() }
+              { this.renderBitFinance() }
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={ coverProtocols ? coverProtocols.filter((asset) => {
+          count={ bitfinanceProtocols ? bitfinanceProtocols.filter((asset) => {
             if(!asset) {
               return false
             }
@@ -257,22 +257,22 @@ class NewCover extends Component {
     )
   }
 
-  renderCover = () => {
+  renderBitFinance = () => {
     const { classes } = this.props
     const {
-      coverProtocols,
+      bitfinanceProtocols,
       page,
       rowsPerPage
     } = this.state
 
-    if(!coverProtocols || coverProtocols.length === 0) {
+    if(!bitfinanceProtocols || bitfinanceProtocols.length === 0) {
       return <TableRow className={ classes.optionRow } key={'No'}>
         <TableCell colSpan={9} align="center">
-          <Typography>You don't have any cover tokens</Typography>
+          <Typography>You don't have any BitFinance tokens</Typography>
         </TableCell>
       </TableRow>
     }
-    const filteredRows = coverProtocols.filter((asset) => {
+    const filteredRows = bitfinanceProtocols.filter((asset) => {
       if(!asset) {
         return false
       }
@@ -316,7 +316,7 @@ class NewCover extends Component {
                 </div>
                 </TableCell>
               <TableCell align="center">
-                <Tooltip title="Claims are handled on Cover Protocol's app">
+                <Tooltip title="Claims are handled on BitFinance Protocol's app">
                   <Button
                     className={ classes.actionButton }
                     variant='contained'
@@ -353,7 +353,7 @@ class NewCover extends Component {
                 </div>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Redemptions are handled on Cover Protocol's app">
+                <Tooltip title="Redemptions are handled on BitFinance Protocol's app">
                   <Button
                     className={ classes.actionButton }
                     variant='contained'
@@ -381,19 +381,19 @@ class NewCover extends Component {
 
   getLogoForProtocol = (protocol) => {
     try {
-      return require(`../../assets/cover/${protocol.name.toLowerCase()}_icon.png`);
+      return require(`../../assets/bitfinance/${protocol.name.toLowerCase()}_icon.png`);
     } catch {
       return require('../../assets/unknown-logo.png')
     }
   }
 
   onClaim = (asset) => {
-    window.open(`https://app.coverprotocol.com/app/claims/new?protocol=${asset.name}`, '_blank')
+    window.open(`https://app.bitfinance.solutions/app/claims/new?protocol=${asset.name}`, '_blank')
   }
 
   onRedeem = (asset) => {
-    window.open(`https://app.coverprotocol.com/app/dashboard`, '_blank')
+    window.open(`https://app.bitfinance.solutions/app/dashboard`, '_blank')
   }
 }
 
-export default withStyles(styles)(NewCover);
+export default withStyles(styles)(NewBitFinance);

@@ -275,8 +275,8 @@ class Header extends Component {
   }
 
   nav = (screen) => {
-    // if(screen === 'cover') {
-    //   window.open("https://yinsure.finance", "_blank")
+    // if(screen === 'bitfinance') {
+    //   window.open("https://app.bitfinance.solutions", "_blank")
     //   return
     // }
     this.handleClose()

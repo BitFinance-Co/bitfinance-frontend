@@ -13,8 +13,8 @@ import { AuthereumConnector } from "@web3-react/authereum-connector";
 
 const POLLING_INTERVAL = 12000;
 const RPC_URLS = {
-  1: "https://eth-mainnet.alchemyapi.io/v2/k2--UT_xVVXMOvAyoxJYqtKhlmyBbqnX",
-  4: "https://rinkeby.infura.io/v3/bd80ce1ca1f94da48e151bb6868bb150"
+  1: "https://eth-mainnet.alchemyapi.io/v2/BTsuqy003CiJy8Qn3hLvtPWybs17R7VB",
+  4: "https://rinkeby.infura.io/v3/b0b1afd85a9649d2b0856efcc6acb769"
 };
 
 export const injected = new InjectedConnector({
@@ -36,7 +36,7 @@ export const walletconnect = new WalletConnectConnector({
 
 export const walletlink = new WalletLinkConnector({
   url: RPC_URLS[1],
-  appName: "yearn.finance"
+  appName: "bitfinance"
 });
 
 export const ledger = new LedgerConnector({

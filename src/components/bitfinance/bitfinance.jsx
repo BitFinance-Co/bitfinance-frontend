@@ -4,13 +4,13 @@ import {
   Typography,
   Button
 } from '@material-ui/core';
-import { colors } from '../../theme'
+import { colors } from '../../theme/theme'
 
 import {
-} from '../../constants'
+} from '../../constants/constants'
 
-import NewCover from './newCover'
-import ExistingCover from './existingCover'
+import NewBitFinance from './newBitFinance'
+import existingBitFinance from './existingBitFinance'
 
 const styles = theme => ({
   root: {
@@ -22,7 +22,7 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  coverContainer: {
+  bitfinanceContainer: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
@@ -52,13 +52,13 @@ const styles = theme => ({
   }
 });
 
-class Cover extends Component {
+class BitFinance extends Component {
 
   constructor() {
     super()
 
     this.state = {
-      screen: 'existingCover'
+      screen: 'existingBitFinance'
     }
   }
 
@@ -68,38 +68,38 @@ class Cover extends Component {
 
     return (
       <div className={ classes.root }>
-        <div className={ classes.coverContainer }>
+        <div className={ classes.bitfinanceContainer }>
           <div className={ classes.header }>
-            { screen === 'newCover' && <Button
+            { screen === 'NewBitFinance' && <Button
               onClick={ this.backClicked }
               variant='outlined'
               color='primary'
               className={ classes.headerButton }
             >Back</Button> }
-            { screen !== 'newCover' && <div className={ classes.headerButton }></div> }
+            { screen !== 'NewBitFinance' && <div className={ classes.headerButton }></div> }
             <Typography variant={'h5'} className={ classes.disclaimer }>This project is in beta. Use at your own risk.</Typography>
-            {screen === 'existingCover' && <Button
+            {screen === 'existingBitFinance' && <Button
               onClick={ this.addClicked }
               variant='contained'
               color='primary'
               className={ classes.headerButton }
-            >Buy Coverage</Button> }
-            { screen !== 'existingCover' && <div className={ classes.headerButton }></div> }
+            >Buy BitFinance</Button> }
+            { screen !== 'existingBitFinance' && <div className={ classes.headerButton }></div> }
           </div>
-          { screen === 'existingCover' && <ExistingCover /> }
-          { screen === 'newCover' && <NewCover /> }
+          { screen === 'existingBitFinance' && <existingBitFinance /> }
+          { screen === 'NewBitFinance' && <NewBitFinance /> }
         </div>
       </div>
     )
   };
 
   addClicked = () => {
-    this.setState({ screen: 'newCover' })
+    this.setState({ screen: 'NewBitFinance' })
   }
 
   backClicked = () => {
-    this.setState({ screen: 'existingCover' })
+    this.setState({ screen: 'existingBitFinance' })
   }
 }
 
-export default withStyles(styles)(Cover);
+export default withStyles(styles)(BitFinance);

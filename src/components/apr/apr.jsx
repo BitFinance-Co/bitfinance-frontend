@@ -283,8 +283,8 @@ class APR extends Component {
             <Grid item md={3}>
               <Card className={classes.statisticCard}>
                 <b>
-                  Annual Yield
-                  <Tooltip title="Average annual yield (unstable) based on 1 month sampled period, across active vaults" arrow>
+                  Annual BitFinance
+                  <Tooltip title="Average annual BitFinance (unstable) based on 1 month sampled period, across active vaults" arrow>
                     <InfoIcon fontSize="small" style={{ color: colors.darkGray, marginLeft: '5px', marginBottom: '-5px' }} />
                   </Tooltip>
                 </b>

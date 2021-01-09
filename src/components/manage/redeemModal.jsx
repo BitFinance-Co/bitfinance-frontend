@@ -115,7 +115,7 @@ class RedeemModal extends Component {
       <Dialog open={ true } onClose={ closeModal } fullWidth={ true } maxWidth={ 'sm' } TransitionComponent={ Transition } fullScreen={ fullScreen }>
         <DialogContent>
           <div className={ classes.intro }>
-            <Typography variant='h3'>Tell us how much iEth you would like to redeem. Once you press submit, you will need to approve the transaction in MetaMask.</Typography>
+            <Typography variant='h3'>Tell us how much BitFinance token you would like to redeem. Once you press submit, you will need to approve the transaction in MetaMask.</Typography>
           </div>
           <div className={ classes.amountContainer }>
             <TextField
@@ -214,7 +214,7 @@ class RedeemModal extends Component {
       return false
     }
 
-    const asset = { iEarnContract: config.iEarnContract }
+    const asset = { iEarnContract: config.bitfinanceContract }
 
     this.setState({ loading: true })
 
@@ -227,7 +227,7 @@ class RedeemModal extends Component {
       return
     }
 
-    const balance = store.getStore('iEthBalance')
+    const balance = store.getStore('bitfinanceBalance')
     let amount = balance*percent/100
 
     this.setState({ amount: amount.toFixed(8) })
